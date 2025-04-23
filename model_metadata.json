@@ -1,0 +1,15 @@
+{
+    "creation_date": "2025-04-09 04:41:31",
+    "model_type": "RandomForestRegressor",
+    "version": "1.0",
+    "features": [
+        "Humidity (%)",
+        "Annual Mean Temp",
+        "Wind Speed (km/h)"
+    ],
+    "performance": {
+        "RMSE": 25.129050381468943,
+        "MAE": 15.551907999999937,
+        "R2": 0.9727999762972154
+    }
+}

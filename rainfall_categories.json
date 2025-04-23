@@ -1,0 +1,22 @@
+{
+    "Low": {
+        "min": 0,
+        "max": 200,
+        "description": "Arid/semi-arid regions"
+    },
+    "Moderate": {
+        "min": 200,
+        "max": 600,
+        "description": "Suitable for cereals, legumes"
+    },
+    "High": {
+        "min": 600,
+        "max": 1200,
+        "description": "Ideal for fruit trees, tea"
+    },
+    "Excessive": {
+        "min": 1200,
+        "max": Infinity,
+        "description": "Risk of flooding"
+    }
+}

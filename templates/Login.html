@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RainPredict AI | Login & Register</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #00bcd4;
+      --primary-dark: #0097a7;
+      --secondary: #03a9f4;
+      --error: #ff4444;
+      --success: #00C851;
+      --text: #ffffff;
+      --text-light: rgba(255, 255, 255, 0.8);
+      --bg-dark: rgba(0, 0, 0, 0.75);
+      --bg-light: rgba(255, 255, 255, 0.1);
+      --border-radius: 8px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      --transition: all 0.3s ease;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-image: url("{{ url_for('static', filename='background.jpg') }}");
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: var(--bg-dark);
+      backdrop-filter: blur(10px);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+      animation: fadeInUp 0.5s ease-out;
+    }
+
+    .form-container {
+      padding: 40px;
+    }
+
+    @media (max-width: 768px) {
+      .form-container {
+        padding: 30px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .form-container {
+        padding: 25px;
+      }
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 15px;
+      padding-right: 40px;
+      border: 2px solid var(--bg-light);
+      border-radius: var(--border-radius);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--text);
+      font-size: 1rem;
+      transition: var(--transition);
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(0, 188, 212, 0.2);
+    }
+
+    .input-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-light);
+      cursor: pointer;
+    }
+
+    .input-icon:hover {
+      color: var(--primary);
+    }
+
+    .options {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+      font-size: 0.9rem;
+    }
+
+    .checkbox {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .checkbox input {
+      width: auto;
+      accent-color: var(--primary);
+    }
+
+    .forgot-password {
+      color: var(--primary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+
+    .forgot-password:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 188, 212, 0.4);
+    }
+
+    .btn:disabled {
+      background: #cccccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+
+    .btn-spinner {
+      display: inline-block;
+      width: 18px;
+      height: 18px;
+      border: 3px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      border-top-color: white;
+      animation: spin 1s ease-in-out infinite;
+    }
+
+    .social-login {
+      margin: 25px 0;
+      text-align: center;
+      position: relative;
+    }
+
+    .social-login::before,
+    .social-login::after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      width: 30%;
+      height: 1px;
+      background: var(--bg-light);
+    }
+
+    .social-login::before {
+      left: 0;
+    }
+
+    .social-login::after {
+      right: 0;
+    }
+
+    .social-login p {
+      margin-bottom: 15px;
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .social-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .social-btn {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      background: var(--bg-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .social-btn:hover {
+      background: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    .toggle-form {
+      text-align: center;
+      margin-top: 25px;
+      font-size: 0.95rem;
+    }
+
+    .toggle-link {
+      color: var(--primary);
+      cursor: pointer;
+      font-weight: 500;
+      transition: var(--transition);
+      display: inline-block;
+    }
+
+    .toggle-link:hover {
+      text-decoration: underline;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: var(--border-radius);
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .error {
+      background: rgba(255, 68, 68, 0.2);
+      color: var(--error);
+      border: 1px solid var(--error);
+      display: block;
+    }
+
+    .success {
+      background: rgba(0, 200, 81, 0.2);
+      color: var(--success);
+      border: 1px solid var(--success);
+      display: block;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 480px) {
+      h2 {
+        font-size: 1.6rem;
+      }
+
+      .options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+      }
+
+      .social-login::before,
+      .social-login::after {
+        width: 25%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <!-- Login Form -->
+    <div id="login-form">
+      <div class="form-container">
+        <h2><i class="fas fa-sign-in-alt"></i> Welcome Back</h2>
+
+        <div id="login-error" class="message error hidden"></div>
+
+        <div class="form-group">
+          <label for="login-username">Username or Email</label>
+          <div class="input-wrapper">
+            <input type="text" id="login-username" placeholder="Enter your username or email" required>
+            <i class="fas fa-user input-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="login-password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="login-password" placeholder="Enter your password" required>
+            <i class="fas fa-eye input-icon" id="toggle-login-password"></i>
+          </div>
+        </div>
+
+        <div class="options">
+          <div class="checkbox">
+            <input type="checkbox" id="remember-me">
+            <label for="remember-me">Remember me</label>
+          </div>
+          <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <button id="login-btn" onclick="loginUser()">
+          <span id="login-text">Login</span>
+          <span id="login-spinner" class="btn-spinner hidden"></span>
+        </button>
+
+        <div class="social-login">
+          <p>Or login with</p>
+          <div class="social-buttons">
+            <div class="social-btn" title="Login with Google">
+              <i class="fab fa-google"></i>
+            </div>
+            <div class="social-btn" title="Login with Facebook">
+              <i class="fab fa-facebook-f"></i>
+            </div>
+            <div class="social-btn" title="Login with Twitter">
+              <i class="fab fa-twitter"></i>
+            </div>
+          </div>
+        </div>
+
+        <div class="toggle-form">
+          Don't have an account? <span class="toggle-link" onclick="toggleForms()">Register here</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-form" class="hidden">
+      <div class="form-container">
+        <h2><i class="fas fa-user-plus"></i> Create Account</h2>
+
+        <div id="register-error" class="message error hidden"></div>
+        <div id="register-success" class="message success hidden"></div>
+
+        <div class="form-group">
+          <label for="fullname">Full Name</label>
+          <div class="input-wrapper">
+            <input type="text" id="fullname" placeholder="Enter your full name" required>
+            <i class="fas fa-user input-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <div class="input-wrapper">
+            <input type="email" id="email" placeholder="Enter your email" required>
+            <i class="fas fa-envelope input-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <div class="input-wrapper">
+            <input type="text" id="username" placeholder="Choose a username" required>
+            <i class="fas fa-at input-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="password" placeholder="Create a password" required>
+            <i class="fas fa-eye input-icon" id="toggle-password"></i>
+          </div>
+          <small style="display: block; margin-top: 5px; color: var(--text-light);">
+            Must be at least 8 characters
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="confirm_password">Confirm Password</label>
+          <div class="input-wrapper">
+            <input type="password" id="confirm_password" placeholder="Confirm your password" required>
+            <i class="fas fa-eye input-icon" id="toggle-confirm-password"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone_number">Phone Number</label>
+          <div class="input-wrapper">
+            <input type="tel" id="phone_number" placeholder="Enter your phone number">
+            <i class="fas fa-phone input-icon"></i>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="city">City</label>
+          <div class="input-wrapper">
+            <input type="text" id="city" placeholder="Enter your city" required>
+            <i class="fas fa-at input-icon"></i>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Address (Optional)</label>
+          <div class="input-wrapper">
+            <input type="text" id="address" placeholder="Enter your address">
+            <i class="fas fa-map-marker-alt input-icon"></i>
+          </div>
+        </div>
+        <div class="checkbox" style="margin-bottom: 20px;">
+          <input type="checkbox" id="terms" required>
+          <label for="terms">I agree to the <a href="#" style="color: var(--primary);">Terms & Conditions</a></label>
+        </div>
+
+        <button id="register-btn" onclick="registerUser()">
+          <span id="register-text">Register</span>
+          <span id="register-spinner" class="btn-spinner hidden"></span>
+        </button>
+
+        <div class="toggle-form">
+          Already have an account? <span class="toggle-link" onclick="toggleForms()">Login here</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Toggle password visibility
+    function setupPasswordToggle(inputId, toggleId) {
+      const passwordInput = document.getElementById(inputId);
+      const toggleIcon = document.getElementById(toggleId);
+
+      toggleIcon.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        toggleIcon.classList.toggle('fa-eye');
+        toggleIcon.classList.toggle('fa-eye-slash');
+      });
+    }
+
+    // Set up password toggles
+    setupPasswordToggle('login-password', 'toggle-login-password');
+    setupPasswordToggle('password', 'toggle-password');
+    setupPasswordToggle('confirm_password', 'toggle-confirm-password');
+
+    // Toggle between login and register forms
+    function toggleForms() {
+      document.getElementById("login-form").classList.toggle("hidden");
+      document.getElementById("register-form").classList.toggle("hidden");
+
+      // Clear messages when switching forms
+      document.getElementById('login-error').classList.add('hidden');
+      document.getElementById('register-error').classList.add('hidden');
+      document.getElementById('register-success').classList.add('hidden');
+    }
+
+    // Show loading state for a button
+    function showLoading(buttonId, textId, spinnerId) {
+      document.getElementById(textId).classList.add('hidden');
+      document.getElementById(spinnerId).classList.remove('hidden');
+      document.getElementById(buttonId).disabled = true;
+    }
+
+    // Hide loading state for a button
+    function hideLoading(buttonId, textId, spinnerId) {
+      document.getElementById(textId).classList.remove('hidden');
+      document.getElementById(spinnerId).classList.add('hidden');
+      document.getElementById(buttonId).disabled = false;
+    }
+
+    // Show message in a message element
+    function showMessage(elementId, message, isError = true) {
+      const element = document.getElementById(elementId);
+      element.textContent = message;
+      element.classList.remove('hidden');
+      element.classList.remove(isError ? 'success' : 'error');
+      element.classList.add(isError ? 'error' : 'success');
+
+      // Scroll to the message
+      element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    // Validate password strength
+    function validatePassword(password) {
+      return password.length >= 8;
+    }
+
+    // Register user function
+    async function registerUser() {
+      const fullname = document.getElementById("fullname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value;
+      const confirmPassword = document.getElementById("confirm_password").value;
+      const phone_number = document.getElementById("phone_number").value.trim();
+      const city = document.getElementById("city").value.trim();
+      const address = document.getElementById("address").value.trim();
+      const termsChecked = document.getElementById("terms").checked;
+
+      const errorMsg = document.getElementById("register-error");
+      const successMsg = document.getElementById("register-success");
+
+      // Clear previous messages
+      errorMsg.classList.add('hidden');
+      successMsg.classList.add('hidden');
+
+      // Validate form
+      if (!fullname || !email || !username || !password || !confirmPassword) {
+        return showMessage('register-error', 'Please fill in all required fields');
+      }
+
+      if (!termsChecked) {
+        return showMessage('register-error', 'You must accept the terms and conditions');
+      }
+
+      if (!validatePassword(password)) {
+        return showMessage('register-error', 'Password must be at least 8 characters');
+      }
+
+      if (password !== confirmPassword) {
+        return showMessage('register-error', 'Passwords do not match');
+      }
+
+      // Show loading state
+      showLoading('register-btn', 'register-text', 'register-spinner');
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fullname,
+            email,
+            username,
+            password,
+            phone_number,
+            city,
+            address
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage('register-success', 'Registration successful! Please login.', false);
+          setTimeout(() => {
+            // Clear form and switch to login
+            document.getElementById("register-form").querySelectorAll('input').forEach(input => {
+              if (input.type !== 'checkbox') input.value = '';
+            });
+            toggleForms();
+          }, 2000);
+        } else {
+          showMessage('register-error', data.error || 'Registration failed');
+        }
+      } catch (error) {
+        showMessage('register-error', 'Error connecting to the server');
+      } finally {
+        hideLoading('register-btn', 'register-text', 'register-spinner');
+      }
+    }
+
+    // Login user function
+    async function loginUser() {
+      const username = document.getElementById("login-username").value.trim();
+      const password = document.getElementById("login-password").value;
+      const rememberMe = document.getElementById("remember-me").checked;
+
+      const errorMsg = document.getElementById("login-error");
+
+      // Clear previous message
+      errorMsg.classList.add('hidden');
+
+      // Validate form
+      if (!username || !password) {
+        return showMessage('login-error', 'Please enter both username and password');
+      }
+
+      // Show loading state
+      showLoading('login-btn', 'login-text', 'login-spinner');
+
+      try {
+        const response = await fetch("http://127.0.0.1:5000/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            username,
+            password,
+            remember: rememberMe
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // Store user data if needed
+          if (data.token) {
+            localStorage.setItem('authToken', data.token);
+          }
+
+          // Redirect to dashboard
+          window.location.href = "/dashboard";
+        } else {
+          showMessage('login-error', data.error || 'Login failed');
+        }
+      } catch (error) {
+        showMessage('login-error', 'Error connecting to the server');
+      } finally {
+        hideLoading('login-btn', 'login-text', 'login-spinner');
+      }
+    }
+
+    // Check for remembered user
+    document.addEventListener('DOMContentLoaded', () => {
+      const rememberedUsername = localStorage.getItem('rememberedUsername');
+      if (rememberedUsername) {
+        document.getElementById('login-username').value = rememberedUsername;
+        document.getElementById('remember-me').checked = true;
+      }
+    });
+  </script>
+</body>
+</html>
